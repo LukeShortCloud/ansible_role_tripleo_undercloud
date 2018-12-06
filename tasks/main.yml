@@ -1,0 +1,68 @@
+---
+- name: Install the OpenStack repositories from CentOS
+  package:
+    name: "centos-release-openstack-{{ openstack_release }}"
+    state: present
+  when: openstack_repo == "centos"
+
+- name: Install the OpenStack repositories from RDO
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.file }}"
+    mode: 0644
+    owner: root
+    group: root
+  loop:
+    - file: "/etc/yum.repos.d/delorean-{{ openstack_release }}.repo"
+      url: "https://trunk.rdoproject.org/centos7-{{ openstack_release }}/current/delorean.repo"
+    - file: "/etc/yum.repos.d/delorean-deps-{{ openstack_release }}.repo"
+      url: "https://trunk.rdoproject.org/centos7-{{ openstack_release }}/delorean-deps.repo"
+  when: openstack_repo == "rdo"
+
+- name: Install TripleO packages
+  package:
+    name: "{{ tripleo_undercloud_packages }}"
+    state: present
+
+- name: Create the stack group
+  group:
+    name: stack
+    state: present
+
+- name: Create the stack user
+  user:
+    name: stack
+    group: stack
+    state: present
+
+- name: Create a sudo configuration file for the stack user
+  copy:
+    content: "stack ALL=(root) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/stack
+    mode: 0440
+    owner: root
+    group: root
+
+- name: Copy sample Undercloud configuration
+  copy:
+    src: /usr/share/instack-undercloud/undercloud.conf.sample
+    dest: /home/stack/undercloud.conf
+    mode: 0600
+    owner: stack
+    group: stack
+    remote_src: True
+    force: False
+
+- name: Enable the fake/manual power management driver in Ironic
+  ini_file:
+    path: /home/stack/undercloud.conf
+    section: DEFAULT
+    option: enabled_hardware_types
+    # By default, the other drivers listed here (besides manual-management) are enabled.
+    value: ipmi,redfish,ilo,idrac,manual-management
+
+- name: Install the Undercloud services (this can take up to 1 hour)
+  command: openstack undercloud install
+  become: true
+  become_user: stack
+  when: tripleo_undercloud_install == True

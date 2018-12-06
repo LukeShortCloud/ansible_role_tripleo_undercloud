@@ -1,0 +1,5 @@
+---
+openstack_release: rocky
+# "centos" or "rdo"
+openstack_repo: rdo
+tripleo_undercloud_install: False

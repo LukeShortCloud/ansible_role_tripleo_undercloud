@@ -3,3 +3,4 @@ openstack_release: rocky
 # "centos" or "rdo"
 openstack_repo: rdo
 tripleo_undercloud_install: False
+tripleo_undercloud_upload_images: False

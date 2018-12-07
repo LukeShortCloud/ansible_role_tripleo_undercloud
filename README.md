@@ -4,7 +4,7 @@ A role to configure and install the Undercloud as part of an OpenStack deploymen
 
 ## Requirements
 
-* Ansible >= 2.5
+* Ansible >= 2.7
 
 ## Dependencies
 
@@ -15,6 +15,7 @@ None.
 * openstack_release = The OpenStack release to setup on the Undercloud. Default: rocky.
 * openstack_repo = The OpenStack RPM repository to use: "centos" or "rdo". Default: rdo.
 * tripleo_undercloud_install = If the "openstack undercloud install" command should be executed. Default: False.
+* tripleo_undercloud_upload_images = If the Overcloud kernel, initramfs, and QCOW2 image should be automatically downloaded and uploaded to Glance. Default: False.
 
 ## Example Playbook
 

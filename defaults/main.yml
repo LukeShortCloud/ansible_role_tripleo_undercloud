@@ -4,3 +4,8 @@ openstack_release: rocky
 openstack_repo: rdo
 tripleo_undercloud_install: False
 tripleo_undercloud_upload_images: False
+tripleo_undercloud_config:
+  - section: DEFAULT
+    option: enabled_hardware_types
+    # By default, the other drivers listed here (besides manual-management) are enabled.
+    value: ipmi,redfish,ilo,idrac,manual-management

@@ -56,10 +56,11 @@
 - name: Enable the fake/manual power management driver in Ironic
   ini_file:
     path: /home/stack/undercloud.conf
-    section: DEFAULT
-    option: enabled_hardware_types
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
     # By default, the other drivers listed here (besides manual-management) are enabled.
-    value: ipmi,redfish,ilo,idrac,manual-management
+    value: "{{ item.value }}"
+  loop: "{{ tripleo_undercloud_config }}"
 
 - name: Install the Undercloud services (this can take up to 1 hour)
   command: openstack undercloud install

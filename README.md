@@ -16,6 +16,7 @@ None.
 * openstack_repo = The OpenStack RPM repository to use: "centos" or "rdo". Default: rdo.
 * tripleo_undercloud_install = If the "openstack undercloud install" command should be executed. Default: False.
 * tripleo_undercloud_upload_images = If the Overcloud kernel, initramfs, and QCOW2 image should be automatically downloaded and uploaded to Glance. Default: False.
+* tripleo_undercloud_config = Custom configurations for the Undercloud.
 
 ## Example Playbook
 

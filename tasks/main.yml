@@ -19,6 +19,29 @@
       url: "https://trunk.rdoproject.org/centos7-{{ openstack_release }}/delorean-deps.repo"
   when: openstack_repo == "rdo"
 
+- name: Register Red Hat subscriptions
+  redhat_subscription:
+    state: present
+    username: "{{ rh_user }}"
+    password: "{{ rh_pass }}"
+    auto_attach: true
+  when: openstack_repo == "rhosp"
+
+- name: Install the OpenStack repositories from Red Hat
+  rhsm_repository:
+    name: "{{ item }}"
+  loop:
+    - rhel-7-server-rpms
+    - rhel-7-server-extras-rpms
+    - rhel-7-server-rh-common-rpms
+    - rhel-ha-for-rhel-7-server-rpms
+    - rhel-7-server-nfv-rpms
+    - rhel-7-server-rhceph-3-tools-rpms
+    - rhel-7-server-rhceph-3-mon-rpms
+    - rhel-7-server-rhceph-3-osd-rpms
+    - "rhel-7-server-openstack-{{ openstack_release }}-rpms"
+  when: openstack_repo == "rhosp"
+
 - name: Install TripleO packages
   package:
     name: "{{ tripleo_undercloud_packages }}"

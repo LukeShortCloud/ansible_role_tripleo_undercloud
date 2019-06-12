@@ -4,6 +4,8 @@
     name: "centos-release-openstack-{{ openstack_release }}"
     state: present
   when: openstack_repo == "centos"
+  tags:
+    - repo
 
 - name: Install the OpenStack repositories from RDO
   get_url:
@@ -18,6 +20,8 @@
     - file: "/etc/yum.repos.d/delorean-deps-{{ openstack_release }}.repo"
       url: "https://trunk.rdoproject.org/centos7-{{ openstack_release }}/delorean-deps.repo"
   when: openstack_repo == "rdo"
+  tags:
+    - repo
 
 - name: Register Red Hat subscriptions
   redhat_subscription:
@@ -26,6 +30,8 @@
     password: "{{ rh_pass }}"
     auto_attach: true
   when: openstack_repo == "rhosp"
+  tags:
+    - repo
 
 - name: Install the OpenStack repositories from Red Hat
   rhsm_repository:
@@ -41,6 +47,8 @@
     - rhel-7-server-rhceph-3-osd-rpms
     - "rhel-7-server-openstack-{{ openstack_release }}-rpms"
   when: openstack_repo == "rhosp"
+  tags:
+    - repo
 
 - name: Install TripleO packages
   package:

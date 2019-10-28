@@ -1,3 +1,7 @@
+# DEPRECATED
+
+**Please use the [ansible_collection_lab_openstack](https://github.com/ekultails/ansible_collection_lab_openstack) instead. This code has been merged into there.**
+
 # ansible_role_tripleo_undercloud
 
 A role to configure and install the Undercloud as part of an OpenStack deployment using TripleO.
